@@ -1,0 +1,188 @@
+[
+  {
+    "name": "DeepSeek-Coder-V2",
+    "link": "https://huggingface.co/deepseek-ai/deepseek-coder-v2-lite-instruct",
+    "open-data": "None",
+    "scores": {
+      "single": {
+        "syntax": 99.06263784737538,
+        "exe": 64.24790471989414,
+        "decomplexity": 26.712150076387033,
+        "codebleu": 55.26601165692345,
+        "overall": 61.32217607514501
+      },
+      "combination": {
+        "syntax": 2.78853601859024,
+        "exe": 0.0,
+        "decomplexity": 99.49409607501532,
+        "codebleu": 21.592396357417094,
+        "overall": 30.96875711275566
+      }
+    },
+    "is-expert": false,
+    "prompt": "oneshot",
+    "size": 7.0
+  },
+  {
+    "name": "Llama-3.1",
+    "link": "https://huggingface.co/meta-llama/Meta-Llama-3.1-8B-Instruct",
+    "open-data": "None",
+    "scores": {
+      "single": {
+        "syntax": 93.51565946184385,
+        "exe": 43.72518747243053,
+        "decomplexity": 19.74239781588356,
+        "codebleu": 49.23426269232681,
+        "overall": 51.55437686062118
+      },
+      "combination": {
+        "syntax": 0.69713400464756,
+        "exe": 0.0,
+        "decomplexity": 99.87675806787935,
+        "codebleu": 23.321644241708007,
+        "overall": 30.973884078558733
+      }
+    },
+    "is-expert": false,
+    "prompt": "oneshot",
+    "size": 8.0
+  },
+  {
+    "name": "Mixtral-v3",
+    "link": "https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3",
+    "open-data": "None",
+    "scores": {
+      "single": {
+        "syntax": 97.20996912218791,
+        "exe": 29.95147772386414,
+        "decomplexity": 24.521943153909152,
+        "codebleu": 44.807870394647296,
+        "overall": 49.122815098652126
+      },
+      "combination": {
+        "syntax": 2.5561580170410534,
+        "exe": 0.0,
+        "decomplexity": 99.85229106665564,
+        "codebleu": 22.377328211541197,
+        "overall": 31.196444323809473
+      }
+    },
+    "is-expert": false,
+    "prompt": "oneshot",
+    "size": 7.0
+  },
+  {
+    "name": "Codestral-22B-v0.1",
+    "link": "https://huggingface.co/mistralai/Codestral-22B-v0.1",
+    "open-data": "None",
+    "scores": {
+      "single": {
+        "syntax": 98.99647110719012,
+        "exe": 84.16409351565946,
+        "decomplexity": 35.96041642528062,
+        "codebleu": 60.95976569056541,
+        "overall": 70.0201866846739
+      },
+      "combination": {
+        "syntax": 0.1549186676994578,
+        "exe": 0.0,
+        "decomplexity": 100.0,
+        "codebleu": 25.0,
+        "overall": 31.288729666924866
+      }
+    },
+    "is-expert": false,
+    "prompt": "oneshot",
+    "size": 22.0
+  },
+  {
+    "name": "GPT-4o",
+    "link": "https://openai.com/gpt-4o",
+    "open-data": "None",
+    "scores": {
+      "single": {
+        "syntax": 95.98588442876049,
+        "exe": 93.41640935156595,
+        "decomplexity": 38.24683790539287,
+        "codebleu": 67.01961536131503,
+        "overall": 73.66718676175859
+      },
+      "combination": {
+        "syntax": 15.104570100697135,
+        "exe": 10.766847405112316,
+        "decomplexity": 94.27837552273186,
+        "codebleu": 46.57822709056518,
+        "overall": 41.68200502977662
+      }
+    },
+    "is-expert": false,
+    "prompt": "oneshot",
+    "size": 0.0
+  },
+  {
+    "name": "JS-deobfuscator",
+    "link": "https://github.com/js-deobfuscator/deobfuscator",
+    "open-data": "None",
+    "scores": {
+      "single": {
+        "syntax": 100.0,
+        "exe": 83.96028681742968,
+        "decomplexity": 1.998819682151186,
+        "codebleu": 49.36575010542951,
+        "overall": 58.831214151252595
+      },
+      "combination": {
+        "syntax": 99.76762199845082,
+        "exe": 0.0774593338497289,
+        "decomplexity": 1.5125928435363099,
+        "codebleu": 27.21985500885597,
+        "overall": 32.144382296173205
+      }
+    },
+    "is-expert": true,
+    "prompt": "None",
+    "size": 0.0
+  },
+  {
+    "name": "Synchrony",
+    "link": "https://github.com/relative/synchrony",
+    "open-data": "None",
+    "scores": {
+      "single": {
+        "syntax": 100.0,
+        "exe": 83.5465372739303,
+        "decomplexity": 22.14426793104806,
+        "codebleu": 59.418821492587135,
+        "overall": 66.27740667439137
+      },
+      "combination": {
+        "syntax": 100.0,
+        "exe": 0.0774593338497289,
+        "decomplexity": 78.94631461230077,
+        "codebleu": 37.79497840852568,
+        "overall": 54.204688088669045
+      }
+    },
+    "is-expert": true,
+    "prompt": "None",
+    "size": 0.0
+  },
+  {
+    "name": "deepseek-chat-20250301",
+    "link": "https://deepseek.com",
+    "open-data": "None",
+    "scores": {
+      "single": {
+        "syntax": 98.74283193647993,
+        "exe": 96.69166299073666,
+        "decomplexity": 36.70047385320414,
+        "codebleu": 68.55041250213829,
+        "overall": 75.17134532063974
+      },
+      "combination": {}
+    },
+    "is-expert": false,
+    "prompt": "oneshot",
+    "size": 671
+  }
+]

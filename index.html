@@ -1,0 +1,672 @@
+<!doctype html>
+<html>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;400&display=swap" rel="stylesheet" />
+
+<head>
+  <meta charset="UTF-8" />
+  <title>JsDeObsBench Leaderboard</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.3/dist/echarts.min.js"></script>
+
+  <!-- <link rel="icon" href="https://images.emojiterra.com/google/noto-emoji/unicode-15/color/1024px/1f9d1-1f4bb.png" /> -->
+  <link rel="icon" href="https://images.emojiterra.com/google/noto-emoji/unicode-16.0/color/svg/1f3c6.svg" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" />
+
+  <link href="https://cdn.jsdelivr.net/npm/prismjs@v1.x/themes/prism.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@v1.x/components/prism-core.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@v1.x/plugins/autoloader/prism-autoloader.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs-bibtex@2.1.0/prism-bibtex.min.js"></script>
+
+
+  <style>
+    body {
+      font-family: "JetBrains Mono", monospace;
+      background-color: #ffffff;
+      color: #000000;
+    }
+
+    #content {
+      width: 75%;
+    }
+
+    th,
+    td {
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+      cursor: pointer;
+      position: relative;
+      padding-right: 20px;
+      transition: background-color 0.2s;
+    }
+    
+    th:hover {
+      background-color: #e0e0e0;
+    }
+
+    #notes {
+      font-size: 1em;
+    }
+
+    #notes h3 {
+      margin-top: 1em;
+      font-size: 2em;
+      text-align: center;
+    }
+
+    #notes li {
+      font-size: 1.2em;
+      font-weight: 300;
+      margin: 1em;
+    }
+
+    .form-select {
+      font-size: 1em;
+    }
+
+    .authors {
+      font-size: 1.2em;
+      color: #666;
+    }
+
+    @media screen and (max-width: 1400px) {
+      body {
+        font-size: 1.6vw;
+      }
+
+      #content {
+        width: 100%;
+      }
+
+      h1 {
+        font-size: 2em;
+      }
+
+      h2 {
+        font-size: 1.6em;
+      }
+
+      h3 {
+        font-size: 1.2em;
+      }
+
+      table {
+        font-size: small;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="content" class="container-fluid d-flex flex-column align-items-center gap-3">
+    <h1 class="text-nowrap mt-5">🏆 JsDeObsBench Leaderboard 🏆</h1>
+    <div class="text-center">
+      <h3 class="fw-light text-nowrap mb-2">JsDeObsBench: Measuring and Benchmarking LLMs for JavaScript Deobfuscation</h3>
+      <p class="authors text-nowrap">Guoqiang Chen, Xin Jin, Zhiqiang Lin</p>
+    </div>
+    <p>📢 News: To submit new evaluation results, please create a pull request in the repository!</p>
+    <div class="d-flex flex-row justify-content-center gap-3">
+      <a href="https://github.com/jsdeobf/jsdeobf.github.io"><img
+          src="https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white"
+          alt="github" class="img-fluid" /></a>
+      <a href="ccs2025a-JsDeObsBench.pdf"><img
+          src="https://img.shields.io/badge/Paper-CCS'25-a55fed.svg?style=for-the-badge" alt="paper"
+          class="img-fluid" /></a>
+        <a href="/"><img
+          src="https://shields.io/badge/JavaScript-F7DF1E?logo=JavaScript&logoColor=000&style=for-the-badge" alt="javascript"
+          class="img-fluid" /></a>
+    </div>
+    <div class="btn-group" role="group" id="Benchmark">
+      <input type="radio" class="btn-check" name="btnradio" id="Single" checked />
+      <label class="btn btn-outline-primary" for="Single">Single</label>
+      <input type="radio" class="btn-check" name="btnradio" id="Combination" />
+      <label class="btn btn-outline-primary" for="Combination">Combination</label>
+    </div>
+    <div id="chart" style="width: 100%; height: 300px"></div>
+    <div class="container-fluid d-flex flex-column align-items-center">
+      <label for="origin" class="text-success mb-3"></label>
+      <table id="origin"
+        class="table table-responsive table-striped table-bordered flex-shrink-1 border border-success border-3">
+      </table>
+    </div>
+    </div>
+    <div id="notes" style="max-width: 70%; margin: 0 auto;">
+      <h3>📝 Notes</h3>
+      <div class="inline-block mt-3">
+        <ol>
+          <li>
+            The single and combination tags present the deobfuscation results against one transformation and combined transformations, respectively.
+          </li>
+          <li>
+            Models are ranked according to overall score by default, which is an average of four metrics. More details about the metrics can be found in our <a href="https://xxx.xxxx.xxx/xxxx.xxx">paper</a>.
+          </li>
+          <li>
+            🎓 marks models designed for JavaScript deobfuscation, namely expert models, and the others are standard models.
+          </li>
+          <li>
+            "Size" here is the amount of overall model weight.
+          </li>
+          <li>
+            Model providers have the responsibility to avoid data contamination. Models trained on close data can be affected by contamination.
+          </li>
+          <li>
+            Please use our benchmark repository to perform a new evaluation of your method and request to merge the results into this leaderboard.
+          </li>
+        </ol>
+      </div>
+    </div>
+    <div class="text-center">
+      <h3>📖 BibTeX</h3>
+    </div>
+    <div style="font-size: 1em; text-align: left; width: 65%; background-color: #F6F5F2; padding: 20px; border-radius: 10px; margin: 0 auto;">
+    <pre style="white-space: pre-wrap;">@inproceedings{jsdeobfbench-2025ccs,<br> title={JsDeObsBench: Measuring and Benchmarking LLMs for JavaScript Deobfuscation},<br> author={Guoqiang Chen and Xin Jin and Zhiqiang Lin},<br> booktitle = {Proceedings of the 2025 ACM SIGSAC Conference on Computer and Communications Security (CCS)},<br> year={2025}<br>}</pre>
+    </div>
+    <div class="text-center" style="margin: 10px; width: 100%;">
+      <footer>The website template was borrowed from <a target="_blank" href="https://github.com/evalplus/evalplus.github.io">EvalPlus</a>.
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    const originTable = document.getElementById("origin");
+    const plusedTable = null; // 将这行删除或设为null
+    const benchmarkRadio = document.getElementById("Benchmark");
+    const chartDom = document.getElementById("chart");
+    var chart = echarts.init(chartDom);
+
+    const dataUrl = "leaderboard.json";
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "leaderboard.json", false); // false makes the request synchronous
+    xhr.send();
+
+    var data;
+    if (xhr.status === 200) {
+      const rawData = JSON.parse(xhr.responseText);
+      // 转换数据格式以适应现有代码
+      data = [];
+      rawData.forEach(item => {
+        data.push({
+          Model: item.name,
+          link: item.link,
+          "open-data": item["open-data"],
+          "pass@1": {
+            "single": item.scores.single.overall,
+            "combination": item.scores.combination.overall
+          },
+          prompted: item.prompt !== "None",
+          "is-expert": item["is-expert"],
+          size: item.size
+        });
+      });
+      
+      // 将数据转换为全局变量以供其他函数使用
+      globalData = data;
+    } else {
+      alert(
+        "Failed to load data from " + dataUrl + ". Please try again later.",
+      );
+    }
+
+    const clearTable = () => {
+      originTable.innerHTML = "";
+      // 删除下面这行
+      // plusedTable.innerHTML = "";
+    };
+
+    const clearChart = () => {
+      chartOption.xAxis.data = [];
+      chartOption.series[0].data = [];
+      chartOption.series[1].data = [];
+      chartOption.series[0].markLine.data = [];
+      chartOption.series[1].markLine.data = [];
+    };
+
+    var chartOption = {
+      legend: {
+        data: ["pass@1*"],
+      },
+      grid: {
+        left: "1%",
+        right: "4%",
+        bottom: "3%",
+        containLabel: true,
+      },
+      xAxis: {
+        name: "Size",
+        type: "category",
+        boundaryGap: false,
+        data: [],
+        axisLabel: {
+          formatter: function (value) {
+            return value + "B";
+          },
+        },
+      },
+      yAxis: {
+        name: "Overall Score",
+        type: "value",
+        show: true,
+        nameTextStyle: {
+          align: "left",
+        },
+        splitLine: {
+          show: true,
+          lineStyle: {
+            type: "dashed",
+          },
+        },
+        axisLabel: {
+          formatter: function (value) {
+            return value.toFixed(2);
+          }
+        }
+      },
+      legend: {
+        data: ["🤖 standard", "🎓 expert"],
+        itemStyle: {
+          opacity: 1.0,
+        },
+        icon: 'none',
+        textStyle: {
+          rich: {
+            standard: {
+              color: '#91cc75'
+            },
+            expert: {
+              color: '#5470c6'
+            }
+          }
+        },
+        formatter: function(name) {
+          if (name === '🤖 standard') {
+            return '{standard|' + name + '}';
+          } else if (name === '🎓 expert') {
+            return '{expert|' + name + '}';
+          }
+          return name;
+        }
+      },
+      tooltip: {
+        trigger: "item",
+        axisPointer: {
+          type: "cross",
+        },
+      },
+      series: [
+        {
+          name: "🤖 standard",
+          type: "scatter",
+          data: [],
+          itemStyle: {
+            color: "#91cc75",
+            opacity: 0.2,
+          },
+          emphasis: {
+            focus: "series",
+          },
+          lineStyle: {
+            width: 2,
+          },
+          markLine: {
+            symbol: "none",
+            emphasis: {
+              label: {
+                position: "middle",
+                formatter: function (params) {
+                  return params.data.name;
+                },
+              },
+            },
+            data: [],
+          },
+        },
+        {
+          name: "🎓 expert",
+          type: "scatter",
+          data: [],
+          itemStyle: {
+            color: "#5470c6",
+            opacity: 0.2,
+          },
+          emphasis: {
+            focus: "series",
+          },
+          lineStyle: {
+            width: 2,
+          },
+          markLine: {
+            symbol: "none",
+            emphasis: {
+              label: {
+                position: "middle",
+                formatter: function (params) {
+                  return params.data.name;
+                },
+              },
+            },
+            data: [],
+          },
+        },
+      ],
+    };
+
+    const theaders = ["Model", "Syntax", "Execution", "Decomplexity", "Similarity", "Overall"];
+    
+    // 用于跟踪当前排序状态的变量
+    let currentSortColumn = "Overall";
+    let currentSortDirection = "desc";
+
+    // score: 'single', 'combination'
+    const displayTable = (table, scoreType) => {
+      // filter out Null
+      data = globalData
+        .filter((row) => {
+          return row["pass@1"][scoreType] != null;
+        });
+      
+      // 根据当前排序列和方向排序数据
+      sortData(data, currentSortColumn, currentSortDirection, scoreType);
+      var thead = document.createElement("thead");
+      var headerRow = document.createElement("tr");
+      // add rank
+      var th = document.createElement("th");
+      th.textContent = "#";
+      headerRow.appendChild(th);
+      // headers
+      theaders.forEach(function (header) {
+        var th = document.createElement("th");
+        th.textContent = header;
+        th.style.cursor = "pointer";
+        
+        // 添加排序指示器
+        if (header === currentSortColumn) {
+          th.textContent += currentSortDirection === "desc" ? " ▼" : " ▲";
+        }
+        
+        // 添加点击事件处理程序
+        th.addEventListener("click", function() {
+          // 如果点击当前排序列，则切换排序方向
+          if (header === currentSortColumn) {
+            currentSortDirection = currentSortDirection === "desc" ? "asc" : "desc";
+          } else {
+            // 否则，更改排序列并设置为降序
+            currentSortColumn = header;
+            currentSortDirection = "desc";
+          }
+          
+          // 重新显示表格
+          clearTable();
+          displayTable(originTable, scoreType);
+        });
+        
+        headerRow.appendChild(th);
+      });
+      thead.appendChild(headerRow);
+      table.appendChild(thead);
+
+      var tbody = document.createElement("tbody");
+      // add rank
+      var rank = 1;
+      data.forEach((row) => {
+        // 从原始数据中找到对应的详细分数
+        const rawItem = JSON.parse(xhr.responseText).find(item => item.name === row.Model);
+        const scores = rawItem.scores[scoreType];
+        
+        var dataRow = document.createElement("tr");
+        var rankCell = document.createElement("td");
+        rankCell.textContent = rank;
+        dataRow.appendChild(rankCell);
+        
+        var modelCell = document.createElement("td");
+        if (rank == 1) {
+          modelCell.textContent = "🥇 ";
+        } else if (rank == 2) {
+          modelCell.textContent = "🥈 ";
+        } else if (rank == 3) {
+          modelCell.textContent = "🥉 ";
+        } else {
+          modelCell.textContent = "";
+        }
+        rank++;
+        var modelLink = document.createElement("a");
+        modelLink.href = row["link"];
+        modelLink.textContent = row["Model"];
+        modelLink.classList.add("link-underline-primary");
+        modelLink.classList.add("text-nowrap");
+        modelCell.appendChild(modelLink);
+        modelCell.classList.add("d-flex");
+        modelCell.classList.add("flex-nowrap");
+        
+        // 添加专家标记
+        if (row["is-expert"]) {
+          var expertSymbol = document.createElement("span");
+          expertSymbol.textContent = "🎓";
+          expertSymbol.title = "Expert for JS deobfuscation";
+          modelCell.appendChild(expertSymbol);
+        }
+        
+        // 添加提示方式标记
+        if (row.prompted) {
+          var promptedSymbol = document.createElement("span");
+          promptedSymbol.textContent = "";
+          promptedSymbol.title = "Used with prompt";
+          modelCell.appendChild(promptedSymbol);
+        }
+        
+        // 添加开源数据标记
+        var opendata = row["open-data"];
+        if (opendata.toUpperCase() == "FULL") {
+          var promptedSymbol = document.createElement("span");
+          promptedSymbol.textContent = "💚";
+          promptedSymbol.title = "Fully open-sourced";
+          modelCell.appendChild(promptedSymbol);
+        } else if (opendata.toUpperCase() == "PARTIAL") {
+          var promptedSymbol = document.createElement("span");
+          promptedSymbol.textContent = "💙";
+          promptedSymbol.title = "Partially open-sourced";
+          modelCell.appendChild(promptedSymbol);
+        }
+        dataRow.appendChild(modelCell);
+        
+        // 添加各项评分
+        addScoreCell(dataRow, scores.syntax.toFixed(2));
+        addScoreCell(dataRow, scores.exe.toFixed(2));
+        addScoreCell(dataRow, scores.decomplexity.toFixed(2));
+        addScoreCell(dataRow, scores.codebleu.toFixed(2));
+        
+        // 添加总体评分
+        var overallCell = document.createElement("td");
+        overallCell.textContent = scores.overall.toFixed(2);
+        overallCell.classList.add("fw-bold");
+        overallCell.classList.add("text-success");
+        dataRow.appendChild(overallCell);
+        
+        tbody.appendChild(dataRow);
+      });
+      table.appendChild(tbody);
+    };
+    
+    // 辅助函数：添加评分单元格
+    function addScoreCell(row, score) {
+      var cell = document.createElement("td");
+      cell.textContent = score;
+      row.appendChild(cell);
+    }
+    
+    // 排序函数
+    function sortData(data, column, direction, scoreType) {
+      data.sort((a, b) => {
+        let valueA, valueB;
+        
+        // 根据列名获取对应的值
+        if (column === "Model") {
+          valueA = a.Model.toLowerCase();
+          valueB = b.Model.toLowerCase();
+          // 字符串比较
+          return direction === "desc" ? 
+            (valueB < valueA ? -1 : valueB > valueA ? 1 : 0) : 
+            (valueA < valueB ? -1 : valueA > valueB ? 1 : 0);
+        } else {
+          // 从原始数据中找到对应的详细分数
+          const rawItemA = JSON.parse(xhr.responseText).find(item => item.name === a.Model);
+          const rawItemB = JSON.parse(xhr.responseText).find(item => item.name === b.Model);
+          
+          // 根据列名获取对应的分数
+          switch(column) {
+            case "Syntax":
+              valueA = rawItemA.scores[scoreType].syntax;
+              valueB = rawItemB.scores[scoreType].syntax;
+              break;
+            case "Execution":
+              valueA = rawItemA.scores[scoreType].exe;
+              valueB = rawItemB.scores[scoreType].exe;
+              break;
+            case "Decomplexity":
+              valueA = rawItemA.scores[scoreType].decomplexity;
+              valueB = rawItemB.scores[scoreType].decomplexity;
+              break;
+            case "Similarity":
+              valueA = rawItemA.scores[scoreType].codebleu;
+              valueB = rawItemB.scores[scoreType].codebleu;
+              break;
+            case "Overall":
+            default:
+              valueA = rawItemA.scores[scoreType].overall;
+              valueB = rawItemB.scores[scoreType].overall;
+              break;
+          }
+          
+          // 数值比较
+          return direction === "desc" ? valueB - valueA : valueA - valueB;
+        }
+      });
+      
+      return data;
+    }
+
+    const displayChart = (score) => {
+      const maxMarkLineModels = 8;
+      // sort first
+      const data = globalData
+        .filter((model) => {
+          return model["pass@1"][score] != null;
+        })
+        .sort((a, b) => {
+          return b["pass@1"][score] - a["pass@1"][score];
+        });
+
+      const sizeList = [
+        ...new Set(
+          data
+            .filter((model) => model["size"] != null && model["size"] > 0)
+            .map((model) => Math.round(model["size"])),
+        ),
+      ].sort((a, b) => {
+        return a - b;
+      });
+
+      chartOption.xAxis.data = sizeList;
+      chartOption.yAxis.max =
+        1 + Math.max(...data.map((model) => model["pass@1"][score]));
+
+      const standardModels = data.filter(
+        (model) => model["is-expert"] == false && model["size"] != null && model["size"] > 0,
+      );
+      const expertModels = data.filter(
+        (model) => model["is-expert"] == true && model["size"] != null && model["size"] > 0,
+      );
+      const zeroSizeModels = data.filter(
+        model => model.size === 0 || model.size === null
+      ).slice(0, maxMarkLineModels);
+
+      zeroSizeModels.forEach((model) => {
+        const seriesIndex = model["is-expert"] ? 1 : 0;
+        chartOption.series[seriesIndex].markLine.data.push({
+          name: model["Model"],
+          yAxis: model["pass@1"][score],
+        });
+      });
+
+      [standardModels, expertModels].forEach((series, idx) => {
+        series.forEach((model) => {
+          chartOption.series[idx].data.push({
+            name: model["Model"],
+            value: [`${Math.round(model["size"])}`, model["pass@1"][score]],
+          });
+        });
+      });
+
+      const offsets = [[50, 0]]
+        .concat(Array.from({ length: sizeList.length - 2 }, () => [0, 0]))
+        .concat([[-50, 0]]);
+      sizeList.forEach((size, idx) => {
+        const bestStandardModel = standardModels
+          .filter((model) => Math.round(model["size"]) == size)
+          .sort((a, b) => {
+            return b["pass@1"][score] - a["pass@1"][score];
+          })[0];
+        const bestExpertModel = expertModels
+          .filter((model) => Math.round(model["size"]) == size)
+          .sort((a, b) => {
+            return b["pass@1"][score] - a["pass@1"][score];
+          })[0];
+        const hightLightBest = (series, model) => {
+          const point = chartOption.series[series].data.find(
+            (point) => point.name == model["Model"],
+          );
+          if (point) {
+            point.itemStyle = {
+              opacity: 1.0,
+            };
+            point.label = {
+              show: true,
+              position: "top",
+              offset: offsets[idx],
+              formatter: function (params) {
+                return params.data.name;
+              },
+              color: "inherit",
+            };
+          }
+        };
+        if (bestStandardModel) {
+          hightLightBest(0, bestStandardModel);
+        }
+        if (bestExpertModel) {
+          hightLightBest(1, bestExpertModel);
+        }
+      });
+
+      chart.setOption(chartOption);
+    };
+
+    // 监听单一/组合按钮切换
+    document.getElementById("Single").addEventListener("click", function () {
+      clearTable();
+      displayTable(originTable, "single");
+      clearChart();
+      displayChart("single");
+    });
+
+    document.getElementById("Combination").addEventListener("click", function () {
+      clearTable();
+      displayTable(originTable, "combination");
+      clearChart();
+      displayChart("combination");
+    });
+
+    // 初始加载
+    document.getElementById("Single").click();
+
+    window.addEventListener("resize", () => {
+      chart.resize();
+    });
+  </script>
+</body>
+
+</html>
