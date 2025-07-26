@@ -184,5 +184,29 @@
     "is-expert": false,
     "prompt": "oneshot",
     "size": 671
+  },
+  {
+    "name": "webcrack",
+    "link": "https://github.com/j4k0xb/webcrack",
+    "open-data": "None",
+    "scores": {
+      "single": {
+        "syntax": 100.0,
+        "exe": 100.0,
+        "decomplexity": 33.18917522444185,
+        "codebleu": 62.786963775781416,
+        "overall": 73.99403475005582
+      },
+      "combination": {
+        "syntax": 100.0,
+        "exe": 100.0,
+        "decomplexity": 92.22810319074387,
+        "codebleu": 50.4746177788345,
+        "overall": 85.67568024239459
+      }
+    },
+    "is-expert": true,
+    "prompt": "None",
+    "size": 0.0
   }
 ]
